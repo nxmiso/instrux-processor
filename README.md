@@ -41,12 +41,14 @@ Instrux is a tool designed to process screen recordings and generate step-by-ste
 
 1. Place your video file in the `tmp` directory and name it `video.mp4`.
 
-2. Run the main script:
+2. Set the `context` variable in `main.py` line 11 to describe the video and any specific requirements.
+
+3. Run the main script:
     ```sh
     python main.py
     ```
 
-3. The script will process the video, transcribe the audio, generate a guide, and save the output in the `tmp` directory:
+4. The script will process the video, transcribe the audio, generate a guide, and save the output in the `tmp` directory:
     - `transcript.json`: The transcribed text.
     - `guide.json`: The generated guide in JSON format.
     - `screenshots/`: Directory containing captured screenshots.

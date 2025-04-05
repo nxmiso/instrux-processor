@@ -8,14 +8,14 @@ from gpt import inference
 from deepgram import Deepgram
 
 # Context
-context = "The video is for the Stax.ai CX product and demonstrates how it can be used to setup documents for filling and signing workflows through various options."
+context = "The video is for the Stax.ai CX product and demonstrates how users can configure custom data views for projects, plans, and client data fields - allowing for users to be more organized in how they approach projects."
 
 # This service transcribes audio from a screen recording/walkthrough to create step-by-step instructions.
 dg = Deepgram(os.getenv("DEEPGRAM_KEY"))
 
 if __name__ == "__main__":
     # Clear working directory
-    shutil.rmtree("./tmp", ignore_errors=True)
+    shutil.rmtree("./tmp/screenshots", ignore_errors=True)
     os.makedirs("./tmp/screenshots", exist_ok=True)
     
     # Split audio from video for transcription
@@ -44,8 +44,8 @@ if __name__ == "__main__":
         })
         new_segment = text[-1] == "."
         
-    # with open("./tmp/transcript.json", "w") as f:
-    #     f.write(json.dumps(transcript, indent=2))
+    with open("./tmp/transcript.json", "w") as f:
+        f.write(json.dumps(transcript, indent=2))
         
     # with open("./tmp/transcript.json", "r") as f:
     #     transcript = json.load(f)
@@ -67,8 +67,8 @@ if __name__ == "__main__":
     
     guide = inference(prompt, model="gpt-4o")
     
-    # with open("./tmp/guide.json", "w") as f:
-    #     f.write(json.dumps(guide, indent=2))
+    with open("./tmp/guide.json", "w") as f:
+        f.write(json.dumps(guide, indent=2))
         
     # with open("./tmp/guide.json", "r") as f:
     #     guide = json.load(f)
@@ -79,6 +79,9 @@ if __name__ == "__main__":
         for element in chapter["elements"]:
             if "screenshot" in element:
                 timestamp = element["screenshot"]
+                # Remove everything that's not a digit or colon
+                timestamp = re.sub(r"[^\d:]", "", timestamp)
+                
                 # Convert MM:SS to seconds
                 seconds = int(timestamp.split(":")[0]) * 60 + int(timestamp.split(":")[1])
                 timestamps.append(seconds)
